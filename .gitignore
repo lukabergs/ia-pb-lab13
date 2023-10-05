@@ -3,3 +3,9 @@
 
 # Ada Library Information
 *.ali
+
+# Backups
+b~*
+*.bak
+*.bk*
+*.[0-9]
