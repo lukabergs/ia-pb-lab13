@@ -1,5 +1,7 @@
-with ada.directories, ada.characters.handling, ada.integer_text_io, ada.text_io, nt_console;
-use ada.directories, ada.characters.handling, ada.integer_text_io, ada.text_io, nt_console;
+with Ada.Directories, Ada.Characters.Handling, Ada.Integer_Text_IO,
+  Ada.Text_IO, NT_Console;
+use Ada.Directories, Ada.Characters.Handling, Ada.Integer_Text_IO, Ada.Text_IO,
+  NT_Console;
 
 package body P_Imagen_Escondida is
 
@@ -12,13 +14,13 @@ package body P_Imagen_Escondida is
    ----------------
 
    function Es_Lateral
-     (Img:in T_Imagen;
-      Fil,Col:in Positive)
-      return Boolean
+     (Img : in T_Imagen; Fil, Col : in Positive) return Boolean
    is
       r : Boolean;
    begin
-      if (Fil = Img'First(1) or Fil = Img'Last(1)) xor (Col = Img'First(2) or Col = Img'Last(2)) then
+      if (Fil = Img'First (1) or Fil = Img'Last (1)) xor
+        (Col = Img'First (2) or Col = Img'Last (2))
+      then
          r := True;
       else
          r := False;
@@ -31,13 +33,13 @@ package body P_Imagen_Escondida is
    ----------------
 
    function Es_Esquina
-     (Img:in T_Imagen;
-      Fil,Col:in Positive)
-      return Boolean
+     (Img : in T_Imagen; Fil, Col : in Positive) return Boolean
    is
       r : Boolean;
    begin
-      if (Fil = Img'First(1) or Fil = Img'Last(1)) and (Col = Img'First(2) or Col = Img'Last(2)) then
+      if (Fil = Img'First (1) or Fil = Img'Last (1)) and
+        (Col = Img'First (2) or Col = Img'Last (2))
+      then
          r := True;
       else
          r := False;
@@ -50,13 +52,13 @@ package body P_Imagen_Escondida is
    -----------------
 
    function Es_Interior
-     (Img: in T_Imagen;
-      Fil,Col: in Positive)
-      return Boolean
+     (Img : in T_Imagen; Fil, Col : in Positive) return Boolean
    is
       r : Boolean;
    begin
-      if (Fil = Img'First(1) or Fil = Img'Last(1)) or (Col = Img'First(2) or Col = Img'Last(2)) then
+      if (Fil = Img'First (1) or Fil = Img'Last (1)) or
+        (Col = Img'First (2) or Col = Img'Last (2))
+      then
          r := False;
       else
          r := True;
@@ -68,12 +70,12 @@ package body P_Imagen_Escondida is
    -- Imagen_vacia --
    ------------------
 
-   function Imagen_vacia (filas,columnas: in Integer) return T_Imagen is
-      r : T_Imagen(1..filas, 1..columnas);
+   function Imagen_vacia (filas, columnas : in Integer) return T_Imagen is
+      r : T_Imagen (1 .. filas, 1 .. columnas);
    begin
-      for i in 1..filas loop
-         for j in 1..columnas loop
-            r(i,j) := Duda;
+      for i in 1 .. filas loop
+         for j in 1 .. columnas loop
+            r (i, j) := Duda;
          end loop;
       end loop;
       return r;
@@ -83,48 +85,46 @@ package body P_Imagen_Escondida is
    -- Mostrar --
    -------------
 
-   procedure Mostrar (Img: in T_Imagen) is
+   procedure Mostrar (Img : in T_Imagen) is
    begin
-      for i in Img'range(1) loop
-         for j in Img'range(2) loop
-            if Img(i,j) = Duda then
-               Set_Background(Gray);
-               Set_Foreground(Red);
-            elsif Img(i,j) = Blanco then
-               Set_Background(White);
-               Set_Foreground(Black);
+      for i in Img'Range (1) loop
+         for j in Img'Range (2) loop
+            if Img (i, j) = Duda then
+               Set_Background (Gray);
+               Set_Foreground (Red);
+            elsif Img (i, j) = Blanco then
+               Set_Background (White);
+               Set_Foreground (Black);
             else
-               Set_Background(Black);
-               Set_Foreground(White);
+               Set_Background (Black);
+               Set_Foreground (White);
             end if;
-            put(" ");
+            Put (" ");
          end loop;
-         new_line;
+         New_Line;
       end loop;
-      Set_Background(Black);
-      Set_Foreground(Gray);
-   end mostrar;
+      Set_Background (Black);
+      Set_Foreground (Gray);
+   end Mostrar;
 
    --------------------
    -- Contar_cuadros --
    --------------------
 
    procedure Contar_cuadros
-     (Img: in T_Imagen;
-      Fil, Col: in Integer;
-      Contador: out T_contador)
+     (Img : in T_Imagen; Fil, Col : in Integer; Contador : out T_contador)
    is
    begin
       Contador := (others => 0);
-      for i in Fil-1..Fil+1 loop
-         for j in Col-1..Col+1 loop
-            if i in Img'range(1) and j in Img'range(2) then
-               if Img(i,j) = Duda then
-                  Contador(Duda) := Contador(Duda) + 1;
-               elsif Img(i,j) = Blanco then
-                  Contador(Blanco) := Contador(Blanco) + 1;
+      for i in Fil - 1 .. Fil + 1 loop
+         for j in Col - 1 .. Col + 1 loop
+            if i in Img'Range (1) and j in Img'Range (2) then
+               if Img (i, j) = Duda then
+                  Contador (Duda) := Contador (Duda) + 1;
+               elsif Img (i, j) = Blanco then
+                  Contador (Blanco) := Contador (Blanco) + 1;
                else
-                  Contador(Negro) := Contador(Negro) + 1;
+                  Contador (Negro) := Contador (Negro) + 1;
                end if;
             end if;
          end loop;
@@ -135,15 +135,14 @@ package body P_Imagen_Escondida is
    -- Completa --
    --------------
 
-
-   function Completa (Img: in T_Imagen) return Boolean is
-      r : Boolean := True;
+   function Completa (Img : in T_Imagen) return Boolean is
+      r    : Boolean  := True;
       i, j : Positive := 1;
    begin
-      while r and i in Img'range(1) loop
+      while r and i in Img'Range (1) loop
          j := 1;
-         while r and j in Img'range(2) loop
-            r := Img(i,j) /= Duda;
+         while r and j in Img'Range (2) loop
+            r := Img (i, j) /= Duda;
             j := j + 1;
          end loop;
          i := i + 1;
@@ -155,22 +154,22 @@ package body P_Imagen_Escondida is
    -- Colorear --
    --------------
 
-   procedure Colorear (Img: in out T_Imagen; P: in T_Pista) is
-      cont : T_Contador;
-      i : Integer := P.Fil - 1;
-      j : Integer;
+   procedure Colorear (Img : in out T_Imagen; P : in T_Pista) is
+      cont : T_contador;
+      i    : Integer := P.Fil - 1;
+      j    : Integer;
    begin
-      Contar_cuadros(Img, P.Fil, P.Col, cont);
-      if cont(Duda) > 0 then
-         if P.Valor = 0 or P.Valor = cont(Blanco) then
-            while i <= P.Fil + 1 and cont(Duda) > 0 loop
-               if i in Img'range(1) then
+      Contar_cuadros (Img, P.Fil, P.Col, cont);
+      if cont (Duda) > 0 then
+         if P.Valor = 0 or P.Valor = cont (Blanco) then
+            while i <= P.Fil + 1 and cont (Duda) > 0 loop
+               if i in Img'Range (1) then
                   j := P.Col - 1;
-                  while j <= P.Col + 1 and cont(Duda) > 0 loop
-                     if j in Img'range(2) then
-                        if Img(i, j) = Duda then
-                           Img(i, j) := Negro;
-                           cont(Duda) := cont(Duda) - 1;
+                  while j <= P.Col + 1 and cont (Duda) > 0 loop
+                     if j in Img'Range (2) then
+                        if Img (i, j) = Duda then
+                           Img (i, j)  := Negro;
+                           cont (Duda) := cont (Duda) - 1;
                         end if;
                      end if;
                      j := j + 1;
@@ -178,15 +177,15 @@ package body P_Imagen_Escondida is
                end if;
                i := i + 1;
             end loop;
-         elsif P.Valor - cont(Blanco) = cont(Duda) then
-            while i <= P.Fil + 1 and cont(Duda) > 0 loop
-               if i in Img'range(1) then
+         elsif P.Valor - cont (Blanco) = cont (Duda) then
+            while i <= P.Fil + 1 and cont (Duda) > 0 loop
+               if i in Img'Range (1) then
                   j := P.Col - 1;
-                  while j <= P.Col + 1 and cont(Duda) > 0 loop
-                     if j in Img'range(2) then
-                        if Img(i, j) = Duda then
-                           Img(i, j) := Blanco;
-                           cont(Duda) := cont(Duda) - 1;
+                  while j <= P.Col + 1 and cont (Duda) > 0 loop
+                     if j in Img'Range (2) then
+                        if Img (i, j) = Duda then
+                           Img (i, j)  := Blanco;
+                           cont (Duda) := cont (Duda) - 1;
                         end if;
                      end if;
                      j := j + 1;
@@ -202,13 +201,13 @@ package body P_Imagen_Escondida is
    -- Mostrar --
    -------------
 
-   procedure Mostrar (L: in T_Lista_E_Pistas) is
+   procedure Mostrar (L : in T_Lista_E_Pistas) is
       ox : constant Integer := Where_X;
       oy : constant Integer := Where_Y;
    begin
-      for i in 1..L.Cont loop
-         goto_xy(ox + L.Rest(i).Col - 1, oy + L.Rest(i).Fil - 1);
-         put(character'val((L.Rest(i).Valor) + 48));
+      for i in 1 .. L.Cont loop
+         Goto_XY (ox + L.Rest (i).Col - 1, oy + L.Rest (i).Fil - 1);
+         Put (Character'Val ((L.Rest (i).Valor) + 48));
       end loop;
    end Mostrar;
 
@@ -216,25 +215,25 @@ package body P_Imagen_Escondida is
    -- Anadir --
    ------------
 
-   procedure Anadir (L: in out T_Lista_E_Pistas; P: in T_Pista) is
+   procedure Anadir (L : in out T_Lista_E_Pistas; P : in T_Pista) is
    begin
-      L.Cont := L.Cont + 1;
-      L.Rest(L.Cont) := P;
+      L.Cont          := L.Cont + 1;
+      L.Rest (L.Cont) := P;
    end Anadir;
 
    ------------
    -- Borrar --
    ------------
 
-   procedure Borrar (L: in out T_Lista_E_Pistas; P: in T_Pista) is
+   procedure Borrar (L : in out T_Lista_E_Pistas; P : in T_Pista) is
       i : Integer := 1;
       r : Boolean := False;
    begin
       loop
-         if L.Rest(i) = P then
-            L.Rest(i..L.Cont) := L.Rest(i+1..L.Cont+1);
-            L.Cont := L.Cont - 1;
-            r := True;
+         if L.Rest (i) = P then
+            L.Rest (i .. L.Cont) := L.Rest (i + 1 .. L.Cont + 1);
+            L.Cont               := L.Cont - 1;
+            r                    := True;
          end if;
          exit when i >= L.Cont or r;
          i := i + 1;
@@ -246,18 +245,18 @@ package body P_Imagen_Escondida is
    ------------------
 
    procedure Buscar_Pista
-     (Lp: in T_Lista_E_Pistas;
-      Img: in T_Imagen;
-      P: out T_Pista)
+     (Lp : in T_Lista_E_Pistas; Img : in T_Imagen; P : out T_Pista)
    is
-      r : Boolean := False;
-      i : Integer := Lp.Rest'first;
-      cont : T_Contador;
+      r    : Boolean := False;
+      i    : Integer := Lp.Rest'First;
+      cont : T_contador;
    begin
       while not r and i <= Lp.Cont loop
-         Contar_cuadros(Img, Lp.Rest(i).Fil, Lp.Rest(i).Col, cont);
-         if lp.Rest(i).Valor = 0 or lp.Rest(i).Valor = cont(Blanco) or lp.Rest(i).Valor - cont(Blanco) = cont(Duda) then
-            P := Lp.Rest(i);
+         Contar_cuadros (Img, Lp.Rest (i).Fil, Lp.Rest (i).Col, cont);
+         if Lp.Rest (i).Valor = 0 or Lp.Rest (i).Valor = cont (Blanco) or
+           Lp.Rest (i).Valor - cont (Blanco) = cont (Duda)
+         then
+            P := Lp.Rest (i);
             r := True;
          end if;
          i := i + 1;
@@ -271,8 +270,8 @@ package body P_Imagen_Escondida is
    -- longitud --
    --------------
 
-   function longitud (L:in T_Lista_D_Pistas) return Natural is
-      r : Natural := 0;
+   function longitud (L : in T_Lista_D_Pistas) return Natural is
+      r : Natural          := 0;
       a : T_Lista_D_Pistas := L;
    begin
       if a /= null then
@@ -289,7 +288,7 @@ package body P_Imagen_Escondida is
    -- Anadir --
    ------------
 
-   procedure Anadir (L: in out T_Lista_D_Pistas; P: in T_Pista) is
+   procedure Anadir (L : in out T_Lista_D_Pistas; P : in T_Pista) is
       a : T_Lista_D_Pistas := L;
    begin
       if L /= null then
@@ -307,7 +306,7 @@ package body P_Imagen_Escondida is
    -- Concatenar --
    ----------------
 
-   procedure Concatenar (L1,L2: in out T_Lista_D_Pistas) is
+   procedure Concatenar (L1, L2 : in out T_Lista_D_Pistas) is
       a : T_Lista_D_Pistas;
    begin
       if L1 /= null then
@@ -316,7 +315,7 @@ package body P_Imagen_Escondida is
             a := a.Sig;
          end loop;
          a.Sig := L2;
-         L2 := null;
+         L2    := null;
       end if;
    end Concatenar;
 
@@ -324,12 +323,12 @@ package body P_Imagen_Escondida is
    -- Mostrar --
    -------------
 
-   procedure Mostrar (L: in T_Lista_D_Pistas) is
+   procedure Mostrar (L : in T_Lista_D_Pistas) is
       a : T_Lista_D_Pistas := L;
    begin
       while a /= null loop
-         goto_xy(a.Pista.Col - 1, a.Pista.Fil - 1);
-         put(character'val((a.Pista.Valor) + 48));
+         Goto_XY (a.Pista.Col - 1, a.Pista.Fil - 1);
+         Put (Character'Val ((a.Pista.Valor) + 48));
          a := a.Sig;
       end loop;
    end Mostrar;
@@ -339,31 +338,30 @@ package body P_Imagen_Escondida is
    -------------------
 
    procedure Iniciar_Juego
-     (Ruta: in String;
-      filas,columnas:  out Integer;
-      LP :  out T_Lista_E_Pistas)
+     (Ruta : in     String; filas, columnas : out Integer;
+      LP   :    out T_Lista_E_Pistas)
    is
-      f1 : file_type;
-      a : Character;
+      f1   : File_Type;
+      a    : Character;
       i, j : Integer := 1;
    begin
-      LP.cont := 0;
-      open(f1, In_File,"games/" & Ruta & ".game");
-      get(f1, filas);
-      get(f1, columnas);
-      while not end_of_file(f1) loop
-         get(f1, a);
-         if a in '0'..'9' then
-            Anadir(LP, (i, j, (character'pos(a) - 48)));
+      LP.Cont := 0;
+      Open (f1, In_File, "games/" & Ruta & ".game");
+      Get (f1, filas);
+      Get (f1, columnas);
+      while not End_Of_File (f1) loop
+         Get (f1, a);
+         if a in '0' .. '9' then
+            Anadir (LP, (i, j, (Character'Pos (a) - 48)));
          end if;
-         if end_of_line(f1) then
+         if End_Of_Line (f1) then
             i := i + 1;
             j := 1;
          else
             j := j + 1;
          end if;
       end loop;
-      close(f1);
+      Close (f1);
    end Iniciar_Juego;
 
    -------------------
@@ -371,42 +369,40 @@ package body P_Imagen_Escondida is
    -------------------
 
    procedure Guardar_Juego
-     (filename: in String;
-      fils,cols:  in Integer;
-      Lp :  in T_Lista_e_Pistas;
-      LS :  in T_lista_D_Pistas)
+     (filename : in String; fils, cols : in Integer; Lp : in T_Lista_E_Pistas;
+      LS       : in T_Lista_D_Pistas)
    is
-      f1 : file_type;
-      a : T_Lista_D_Pistas := LS;
+      f1 : File_Type;
+      a  : T_Lista_D_Pistas := LS;
    begin
-      if exists(filename) then
-         open(f1, Out_File, "saves/" & filename & ".sav");
+      if Exists (filename) then
+         Open (f1, Out_File, "saves/" & filename & ".sav");
       else
-         create(f1, Out_File, "saves/" & filename & ".sav");
+         Create (f1, Out_File, "saves/" & filename & ".sav");
       end if;
-      put(f1, fils'img);
-      put(f1, cols'img);
-      new_line(f1);
-      put(f1, Lp.Cont'img);
-      new_line(f1);
-      for i in Lp.Rest'first..Lp.Cont loop
-         put(f1, Lp.Rest(i).Fil'img);
-         put(f1, Lp.Rest(i).Col'img);
-         put(f1, Lp.Rest(i).Valor'img);
+      Put (f1, fils'Img);
+      Put (f1, cols'Img);
+      New_Line (f1);
+      Put (f1, Lp.Cont'Img);
+      New_Line (f1);
+      for i in Lp.Rest'First .. Lp.Cont loop
+         Put (f1, Lp.Rest (i).Fil'Img);
+         Put (f1, Lp.Rest (i).Col'Img);
+         Put (f1, Lp.Rest (i).Valor'Img);
       end loop;
-      new_line(f1);
-      put(f1, longitud(LS)'img);
-      new_line(f1);
+      New_Line (f1);
+      Put (f1, longitud (LS)'Img);
+      New_Line (f1);
       if a /= null then
          loop
-            put(f1, a.Pista.Fil'img);
-            put(f1, a.Pista.Col'img);
-            put(f1, a.Pista.Valor'img);
+            Put (f1, a.Pista.Fil'Img);
+            Put (f1, a.Pista.Col'Img);
+            Put (f1, a.Pista.Valor'Img);
             exit when a.Sig = null;
             a := a.Sig;
          end loop;
       end if;
-      close(f1);
+      Close (f1);
    end Guardar_Juego;
 
    --------------------
@@ -414,35 +410,33 @@ package body P_Imagen_Escondida is
    --------------------
 
    procedure Reanudar_Juego
-     (filename: in String;
-      filas, columnas:  out Integer;
-      Lp :  out T_Lista_e_Pistas;
-      LS :  out T_lista_D_Pistas)
+     (filename : in     String; filas, columnas : out Integer;
+      Lp       :    out T_Lista_E_Pistas; LS : out T_Lista_D_Pistas)
    is
-      f1 : file_type;
-      j : Integer;
-      P : T_Pista;
+      f1 : File_Type;
+      j  : Integer;
+      P  : T_Pista;
    begin
-      LS := null;
-      Lp.cont := 0;
-      open(f1, In_File, "saves/" & filename & ".sav");
-      get(f1, filas);
-      get(f1, columnas);
-      get(f1, j);
-      for i in 1..j loop
-         get(f1, P.Fil);
-         get(f1, P.Col);
-         get(f1, P.Valor);
-         Anadir(Lp, P);
+      LS      := null;
+      Lp.Cont := 0;
+      Open (f1, In_File, "saves/" & filename & ".sav");
+      Get (f1, filas);
+      Get (f1, columnas);
+      Get (f1, j);
+      for i in 1 .. j loop
+         Get (f1, P.Fil);
+         Get (f1, P.Col);
+         Get (f1, P.Valor);
+         Anadir (Lp, P);
       end loop;
-      get(f1, j);
-      for i in 1..j loop
-         get(f1, P.Fil);
-         get(f1, P.Col);
-         get(f1, P.Valor);
-         Anadir(LS, P);
+      Get (f1, j);
+      for i in 1 .. j loop
+         Get (f1, P.Fil);
+         Get (f1, P.Col);
+         Get (f1, P.Valor);
+         Anadir (LS, P);
       end loop;
-      close(f1);
+      Close (f1);
    end Reanudar_Juego;
 
    -------------------------
@@ -450,21 +444,21 @@ package body P_Imagen_Escondida is
    -------------------------
 
    function Es_Posible_Resolver
-     (Img: in T_Imagen;
-      P: in T_Pista)
-      return Boolean
+     (Img : in T_Imagen; P : in T_Pista) return Boolean
    is
-      r : Boolean;
-      cont : T_Contador;
+      r    : Boolean;
+      cont : T_contador;
    begin
-      Contar_Cuadros(Img, P.Fil, P.Col, cont);
-      if cont(Duda) = 0 then
-         if cont(Blanco) > 0 or cont(Negro) > 0 then
+      Contar_cuadros (Img, P.Fil, P.Col, cont);
+      if cont (Duda) = 0 then
+         if cont (Blanco) > 0 or cont (Negro) > 0 then
             r := True;
          else
             r := False;
          end if;
-      elsif P.Valor - cont(Blanco) = cont(Duda) or P.Valor = 0 or P.Valor = cont(Blanco) then
+      elsif P.Valor - cont (Blanco) = cont (Duda) or P.Valor = 0 or
+        P.Valor = cont (Blanco)
+      then
          r := True;
       else
          r := False;
@@ -477,27 +471,25 @@ package body P_Imagen_Escondida is
    -------------------
 
    procedure Obtener_Pista
-     (Filas,Columnas: in Integer;
-      Lp: in T_Lista_E_Pistas;
-      P: out T_Pista)
+     (Filas, Columnas : in Integer; Lp : in T_Lista_E_Pistas; P : out T_Pista)
    is
       f, c, i : Integer;
-      r : Boolean := False;
+      r       : Boolean := False;
    begin
-      get(f);
-      get(c);
-      if f in 1..Filas and c in 1..Columnas then
+      Get (f);
+      Get (c);
+      if f in 1 .. Filas and c in 1 .. Columnas then
          i := 1;
          loop
-            if lp.Rest(i).Fil = f and lp.Rest(i).Col = c then
+            if Lp.Rest (i).Fil = f and Lp.Rest (i).Col = c then
                r := True;
             end if;
-            exit when r or i = lp.Cont;
+            exit when r or i = Lp.Cont;
             i := i + 1;
          end loop;
       end if;
       if r then
-         P := lp.Rest(i);
+         P := Lp.Rest (i);
       elsif f = 0 or c = 0 then
          P := (0, 0, 0);
       else
@@ -510,19 +502,17 @@ package body P_Imagen_Escondida is
    --------------
 
    function Resolver
-     (Filas, Columnas: in Integer;
-      Lp: in T_Lista_E_Pistas)
-      return T_Imagen
+     (Filas, Columnas : in Integer; Lp : in T_Lista_E_Pistas) return T_Imagen
    is
-      img : T_Imagen := Imagen_Vacia(Filas, Columnas);
-      P : T_Pista;
-      a : T_Lista_E_Pistas := Lp;
+      img : T_Imagen         := Imagen_vacia (Filas, Columnas);
+      P   : T_Pista;
+      a   : T_Lista_E_Pistas := Lp;
    begin
       loop
-         Buscar_Pista(a, img, P);
-         exit when Completa(img) or not Es_Posible_Resolver(img, P);
-         Colorear(img, P);
-         Borrar(a, P);
+         Buscar_Pista (a, img, P);
+         exit when Completa (img) or not Es_Posible_Resolver (img, P);
+         Colorear (img, P);
+         Borrar (a, P);
       end loop;
       return img;
    end Resolver;
@@ -532,94 +522,93 @@ package body P_Imagen_Escondida is
    ------------
 
    procedure Fase_1
-     (filas, columnas: in Integer;
-      Lp:in out T_Lista_E_Pistas;
-      Sol: out T_lista_D_Pistas)
+     (filas, columnas : in     Integer; Lp : in out T_Lista_E_Pistas;
+      Sol             :    out T_Lista_D_Pistas)
    is
-      img : T_Imagen := Imagen_Vacia(Filas, Columnas);
-      P : T_Pista;
-      r : Boolean := False;
-      ox, oy : Integer;
-      s, pr : character;
+      img      : T_Imagen := Imagen_vacia (filas, columnas);
+      P        : T_Pista;
+      r        : Boolean  := False;
+      ox, oy   : Integer;
+      s, pr    : Character;
       res_prog : Boolean;
    begin
       Sol := null;
-      new_line;
+      New_Line;
       ox := Where_X;
       oy := Where_Y;
-      Mostrar(img);
-      goto_xy(ox, oy);
-      Mostrar(LP);
+      Mostrar (img);
+      Goto_XY (ox, oy);
+      Mostrar (Lp);
       loop
-         goto_xy(ox, oy + filas + 1);
-         put("Resolver progresivamente? <S/N>: ");
-         get(pr);
-         if to_lower(pr) = 's' then
+         Goto_XY (ox, oy + filas + 1);
+         Put ("Resolver progresivamente? <S/N>: ");
+         Get (pr);
+         if To_Lower (pr) = 's' then
             res_prog := True;
-         elsif to_lower(pr) = 'n' then
+         elsif To_Lower (pr) = 'n' then
             res_prog := False;
          else
-            goto_xy(ox, oy + filas + 1);
-            put("                                     ");
-            goto_xy(ox, oy + filas + 1);
-            put("Especifica una opcion valida. ");
-            delay(1.0);
+            Goto_XY (ox, oy + filas + 1);
+            Put ("                                     ");
+            Goto_XY (ox, oy + filas + 1);
+            Put ("Especifica una opcion valida. ");
+            delay (1.0);
          end if;
-         exit when to_lower(pr) = 's' or to_lower(pr) = 'n';
+         exit when To_Lower (pr) = 's' or To_Lower (pr) = 'n';
       end loop;
-      goto_xy(ox, oy);
+      Goto_XY (ox, oy);
       if res_prog then
          loop
-            Buscar_Pista(Lp, img, P);
-            exit when r or not Es_Posible_Resolver(img, P);
-            Colorear(img, P);
-            Mostrar(img);
-            goto_xy(ox, oy);
-            Mostrar(LP);
-            goto_xy(ox, oy);
-            Anadir(Sol, P);
-            Borrar(Lp, P);
-            r := Completa(img);
+            Buscar_Pista (Lp, img, P);
+            exit when r or not Es_Posible_Resolver (img, P);
+            Colorear (img, P);
+            Mostrar (img);
+            Goto_XY (ox, oy);
+            Mostrar (Lp);
+            Goto_XY (ox, oy);
+            Anadir (Sol, P);
+            Borrar (Lp, P);
+            r := Completa (img);
          end loop;
-         Mostrar(img);
+         Mostrar (img);
       else
          loop
-            Buscar_Pista(Lp, img, P);
-            exit when r or not Es_Posible_Resolver(img, P);
-            Colorear(img, P);
-            Anadir(Sol, P);
-            Borrar(Lp, P);
-            r := Completa(img);
+            Buscar_Pista (Lp, img, P);
+            exit when r or not Es_Posible_Resolver (img, P);
+            Colorear (img, P);
+            Anadir (Sol, P);
+            Borrar (Lp, P);
+            r := Completa (img);
          end loop;
-         Mostrar(img);
+         Mostrar (img);
       end if;
       if r then
-         goto_xy(ox, oy + filas + 1);
-         put("                                     ");
-         goto_xy(ox, oy + filas + 1);
-         put_line("Imagen resuelta!");
+         Goto_XY (ox, oy + filas + 1);
+         Put ("                                     ");
+         Goto_XY (ox, oy + filas + 1);
+         Put_Line ("Imagen resuelta!");
       else
-         goto_xy(ox, oy + filas + 1);
-         put("                                     ");
-         goto_xy(ox, oy + filas + 1);
-         put_line("Imagen irresoluble.");
+         Goto_XY (ox, oy + filas + 1);
+         Put ("                                     ");
+         Goto_XY (ox, oy + filas + 1);
+         Put_Line ("Imagen irresoluble.");
       end if;
-      delay(1.0);
+      delay (1.0);
       loop
-         goto_xy(ox, oy + filas + 1);
-         put("                                     ");
-         goto_xy(ox, oy + filas + 1);
-         put("Salir del juego? <S/N>: ");
-         get(s);
-         if to_lower(s) = 's' then
-            Clear_Screen(Black);
-            Set_Foreground(Gray);
-         elsif to_lower(s) /= 'n' then
-            goto_xy(ox, oy + filas + 1);
-            put("Especifica una opcion valida. ");
-            delay(1.0);
+         Goto_XY (ox, oy + filas + 1);
+         Put ("                                     ");
+         Goto_XY (ox, oy + filas + 1);
+         Put ("Salir del juego? <S/N>: ");
+         Get (s);
+         if To_Lower (s) = 's' then
+            Clear_Screen (Black);
+            Set_Foreground (Gray);
+         elsif To_Lower (s) /= 'n' then
+            Goto_XY (ox, oy + filas + 1);
+            Put ("Especifica una opcion valida. ");
+            delay (1.0);
          end if;
-         exit when to_lower(s) = 's';
+         exit when To_Lower (s) = 's';
       end loop;
    end Fase_1;
 
@@ -628,188 +617,229 @@ package body P_Imagen_Escondida is
    ------------
 
    procedure Fase_2
-     (filas, columnas: in Integer;
-      LP: in out T_Lista_E_Pistas;
-      Sol: in out T_Lista_D_Pistas)
+     (filas, columnas : in     Integer; LP : in out T_Lista_E_Pistas;
+      Sol             : in out T_Lista_D_Pistas)
    is
-      img : T_Imagen := Imagen_Vacia(filas, columnas);
-      P : T_Pista;
-      pc, fin, r, sa : Boolean := False;
-      a : T_Lista_D_Pistas := Sol;
-      g, s : character;
-      ox : Integer;
-      oy : Integer;
-      filename : string(1..5);
+      img            : T_Imagen         := Imagen_vacia (filas, columnas);
+      P              : T_Pista;
+      pc, fin, r, sa : Boolean          := False;
+      a              : T_Lista_D_Pistas := Sol;
+      g, s           : Character;
+      ox             : Integer;
+      oy             : Integer;
+      filename       : String (1 .. 5);
    begin
       while a /= null loop
-         Colorear(img, a.Pista);
+         Colorear (img, a.Pista);
          a := a.Sig;
       end loop;
-      new_line;
+      New_Line;
       ox := Where_X;
       oy := Where_Y;
-      Mostrar(img);
-      goto_xy(ox, oy);
-      Mostrar(LP);
-      goto_xy(ox, oy);
-      if LP.cont = 0 then
-         if Completa(img) then
-            goto_xy(ox, oy + filas + 1);
-            put_line("Imagen resuelta!");
+      Mostrar (img);
+      Goto_XY (ox, oy);
+      Mostrar (LP);
+      Goto_XY (ox, oy);
+      if LP.Cont = 0 then
+         if Completa (img) then
+            Goto_XY (ox, oy + filas + 1);
+            Put_Line ("Imagen resuelta!");
          else
-            goto_xy(ox, oy + filas + 1);
-            put_line("Imagen irresoluble.");
+            Goto_XY (ox, oy + filas + 1);
+            Put_Line ("Imagen irresoluble.");
          end if;
       else
          loop
-            Buscar_Pista(LP, img, P);
-            if Es_Posible_Resolver(img, P) then
+            Buscar_Pista (LP, img, P);
+            if Es_Posible_Resolver (img, P) then
                pc := False;
                loop
-                  goto_xy(ox, oy + filas + 1);
-                  put("Introduce coords (F C) de pista [0 para guardar]: ");
-                  Obtener_Pista(filas, columnas, LP, P);
+                  Goto_XY (ox, oy + filas + 1);
+                  Put ("Introduce coords (F C) de pista [0 para guardar]: ");
+                  Obtener_Pista (filas, columnas, LP, P);
                   if P.Fil = 0 then
-                     goto_xy(ox, oy + filas + 1);
-                     put("                                                                                 ");
-                     goto_xy(ox, oy + filas + 1);
-                     put("Introduce un nombre para el archivo de guardado (5 caracteres): ");
-                     get(filename);
-                     goto_xy(ox, oy + filas + 1);
-                     Put("                                                                                                                 ");
-                     goto_xy(ox, oy + filas + 1);
-                     if exists(compose(Current_Directory & "/saves",filename,"sav")) then
-                        Put_Line("Renombrando "& filename & ".sav" & " a " & filename & ".old.sav" & "...");
-                        delay(1.0);
-                        goto_xy(ox, oy + filas + 1);
-                        Put("                                                                                                                 ");
-                        goto_xy(ox, oy + filas + 1);
-                        if exists(compose(Current_directory & "/saves",filename,"old.sav")) then
-                           delete_file(compose(filename,"old.sav"));
-                           rename(compose(Current_Directory & "/saves", filename,"sav"), compose(Current_directory & "/saves",filename,"old.sav"));
+                     Goto_XY (ox, oy + filas + 1);
+                     Put
+                       ("                                                                                 ");
+                     Goto_XY (ox, oy + filas + 1);
+                     Put
+                       ("Introduce un nombre para el archivo de guardado (5 caracteres): ");
+                     Get (filename);
+                     Goto_XY (ox, oy + filas + 1);
+                     Put
+                       ("                                                                                                                 ");
+                     Goto_XY (ox, oy + filas + 1);
+                     if Exists
+                         (Compose
+                            (Current_Directory & "/saves", filename, "sav"))
+                     then
+                        Put_Line
+                          ("Renombrando " & filename & ".sav" & " a " &
+                           filename & ".old.sav" & "...");
+                        delay (1.0);
+                        Goto_XY (ox, oy + filas + 1);
+                        Put
+                          ("                                                                                                                 ");
+                        Goto_XY (ox, oy + filas + 1);
+                        if Exists
+                            (Compose
+                               (Current_Directory & "/saves", filename,
+                                  "old.sav"))
+                        then
+                           Delete_File (Compose (filename, "old.sav"));
+                           Rename
+                             (Compose
+                                (Current_Directory & "/saves", filename,
+                                 "sav"),
+                              Compose
+                                (Current_Directory & "/saves", filename,
+                                 "old.sav"));
                         end if;
                      end if;
-                     Put_Line("Guardando "& filename & ".sav" & "...");
-                     delay(1.0);
-                     Guardar_Juego(filename, filas, columnas, LP, Sol);
+                     Put_Line ("Guardando " & filename & ".sav" & "...");
+                     delay (1.0);
+                     Guardar_Juego (filename, filas, columnas, LP, Sol);
                      loop
-                        goto_xy(ox, oy + filas + 1);
-                        put("                                                                      ");
-                        goto_xy(ox, oy + filas + 1);
-                        put("Salir del juego? <S/N>: ");
-                        get(s);
-                        if to_lower(s) = 's' then
-                           Clear_Screen(Black);
-                           Set_Foreground(Gray);
+                        Goto_XY (ox, oy + filas + 1);
+                        Put
+                          ("                                                                      ");
+                        Goto_XY (ox, oy + filas + 1);
+                        Put ("Salir del juego? <S/N>: ");
+                        Get (s);
+                        if To_Lower (s) = 's' then
+                           Clear_Screen (Black);
+                           Set_Foreground (Gray);
                            sa := True;
-                        elsif to_lower(s) /= 'n' then
-                           goto_xy(ox, oy + filas + 1);
-                           put("Especifica una opcion valida. ");
-                           delay(1.0);
+                        elsif To_Lower (s) /= 'n' then
+                           Goto_XY (ox, oy + filas + 1);
+                           Put ("Especifica una opcion valida. ");
+                           delay (1.0);
                         end if;
-                        exit when to_lower(s) = 'n' or to_lower(s) = 's';
+                        exit when To_Lower (s) = 'n' or To_Lower (s) = 's';
                      end loop;
                   end if;
                   if not sa and P.Fil /= 0 then
-                     goto_xy(ox, oy + filas + 1);
-                     if Es_Posible_Resolver(img, P) then
-                        put("                                                                          ");
-                        goto_xy(ox, oy + filas + 1);
-                        put_line("Pista correcta!");
-                        delay(1.0);
-                        Colorear(img, P);
-                        Anadir(Sol, P);
-                        Borrar(Lp, P);
-                        goto_xy(ox, oy);
-                        Mostrar(img);
-                        goto_xy(ox, oy);
-                        Mostrar(LP);
-                        r := Completa(img);
+                     Goto_XY (ox, oy + filas + 1);
+                     if Es_Posible_Resolver (img, P) then
+                        Put
+                          ("                                                                          ");
+                        Goto_XY (ox, oy + filas + 1);
+                        Put_Line ("Pista correcta!");
+                        delay (1.0);
+                        Colorear (img, P);
+                        Anadir (Sol, P);
+                        Borrar (LP, P);
+                        Goto_XY (ox, oy);
+                        Mostrar (img);
+                        Goto_XY (ox, oy);
+                        Mostrar (LP);
+                        r   := Completa (img);
                         fin := r;
-                        pc := True;
+                        pc  := True;
                      elsif P.Fil = -1 then
-                        put("                                                                          ");
-                        goto_xy(ox, oy + filas + 1);
-                        put_line("No existe pista en las coordenadas introducidas.");
-                        delay(1.0);
+                        Put
+                          ("                                                                          ");
+                        Goto_XY (ox, oy + filas + 1);
+                        Put_Line
+                          ("No existe pista en las coordenadas introducidas.");
+                        delay (1.0);
                      else
-                        put("                                                                          ");
-                        goto_xy(ox, oy + filas + 1);
-                        put_line("Pista incorrecta.");
-                        delay(1.0);
+                        Put
+                          ("                                                                          ");
+                        Goto_XY (ox, oy + filas + 1);
+                        Put_Line ("Pista incorrecta.");
+                        delay (1.0);
                      end if;
                   end if;
                   exit when pc or sa;
                end loop;
             else
-               fin := true;
+               fin := True;
             end if;
             exit when fin or sa;
-            goto_xy(ox, oy);
+            Goto_XY (ox, oy);
          end loop;
          if not sa then
             if r then
-               goto_xy(ox, oy + filas + 1);
-               put_line("Imagen resuelta!");
+               Goto_XY (ox, oy + filas + 1);
+               Put_Line ("Imagen resuelta!");
             else
-               goto_xy(ox, oy + filas + 1);
-               put_line("Imagen irresoluble.");
+               Goto_XY (ox, oy + filas + 1);
+               Put_Line ("Imagen irresoluble.");
             end if;
-            goto_xy(ox, oy);
-            Mostrar(img);
+            Goto_XY (ox, oy);
+            Mostrar (img);
          end if;
       end if;
       if not sa then
-         delay(1.0);
+         delay (1.0);
          loop
-            goto_xy(ox, oy + filas + 1);
-            put("                                                                          ");
-            goto_xy(ox, oy + filas + 1);
-            put("Guardar progreso? <S/N>: ");
-            get(g);
-            if to_lower(g) = 's' then
-               goto_xy(ox, oy + filas + 1);
-               put("Introduce un nombre para el archivo de guardado (5 caracteres): ");
-               get(filename);
-               goto_xy(ox, oy + filas + 1);
-               Put("                                                                                                                 ");
-               goto_xy(ox, oy + filas + 1);
-               if exists(compose(Current_Directory & "/saves",filename,"sav")) then
-                  Put("Renombrando "& filename & ".sav" & " a " & filename & ".old.sav" & "...");
-                  delay(1.0);
-                  goto_xy(ox, oy + filas + 1);
-                  Put("                                                             ");
-                  goto_xy(ox, oy + filas + 1);
-                  if exists(compose(Current_directory & "/saves",filename,"old.sav")) then
-                     delete_file(compose(Current_directory & "/saves",filename,"old.sav"));
-                     rename(compose(Current_Directory & "/saves", filename,"sav"),compose(Current_directory & "/saves",filename,"old.sav"));
+            Goto_XY (ox, oy + filas + 1);
+            Put
+              ("                                                                          ");
+            Goto_XY (ox, oy + filas + 1);
+            Put ("Guardar progreso? <S/N>: ");
+            Get (g);
+            if To_Lower (g) = 's' then
+               Goto_XY (ox, oy + filas + 1);
+               Put
+                 ("Introduce un nombre para el archivo de guardado (5 caracteres): ");
+               Get (filename);
+               Goto_XY (ox, oy + filas + 1);
+               Put
+                 ("                                                                                                                 ");
+               Goto_XY (ox, oy + filas + 1);
+               if Exists
+                   (Compose (Current_Directory & "/saves", filename, "sav"))
+               then
+                  Put
+                    ("Renombrando " & filename & ".sav" & " a " & filename &
+                     ".old.sav" & "...");
+                  delay (1.0);
+                  Goto_XY (ox, oy + filas + 1);
+                  Put
+                    ("                                                             ");
+                  Goto_XY (ox, oy + filas + 1);
+                  if Exists
+                      (Compose
+                         (Current_Directory & "/saves", filename, "old.sav"))
+                  then
+                     Delete_File
+                       (Compose
+                          (Current_Directory & "/saves", filename, "old.sav"));
+                     Rename
+                       (Compose
+                          (Current_Directory & "/saves", filename, "sav"),
+                        Compose
+                          (Current_Directory & "/saves", filename, "old.sav"));
                   end if;
                end if;
-               Put("Guardando " & filename & ".sav" & "...");
-               delay(1.0);
-               Guardar_Juego(filename, filas, columnas, LP, Sol);
-            elsif to_lower(g) /= 'n' then
-               goto_xy(ox, oy + filas + 1);
-               put("Especifica una opcion valida. ");
-               delay(1.0);
+               Put ("Guardando " & filename & ".sav" & "...");
+               delay (1.0);
+               Guardar_Juego (filename, filas, columnas, LP, Sol);
+            elsif To_Lower (g) /= 'n' then
+               Goto_XY (ox, oy + filas + 1);
+               Put ("Especifica una opcion valida. ");
+               delay (1.0);
             end if;
-            exit when to_lower(g) = 's' or to_lower(g) = 'n';
+            exit when To_Lower (g) = 's' or To_Lower (g) = 'n';
          end loop;
          loop
-            goto_xy(ox, oy + filas + 1);
-            put("                                                                      ");
-            goto_xy(ox, oy + filas + 1);
-            put("Salir del juego? <S/N>: ");
-            get(s);
-            if to_lower(s) = 's' then
-               Clear_Screen(Black);
-               Set_Foreground(Gray);
-            elsif to_lower(s) /= 'n' then
-               goto_xy(ox, oy + filas + 1);
-               put("Especifica una opcion valida. ");
-               delay(1.0);
+            Goto_XY (ox, oy + filas + 1);
+            Put
+              ("                                                                      ");
+            Goto_XY (ox, oy + filas + 1);
+            Put ("Salir del juego? <S/N>: ");
+            Get (s);
+            if To_Lower (s) = 's' then
+               Clear_Screen (Black);
+               Set_Foreground (Gray);
+            elsif To_Lower (s) /= 'n' then
+               Goto_XY (ox, oy + filas + 1);
+               Put ("Especifica una opcion valida. ");
+               delay (1.0);
             end if;
-            exit when to_lower(s) = 's';
+            exit when To_Lower (s) = 's';
          end loop;
       end if;
    end Fase_2;
