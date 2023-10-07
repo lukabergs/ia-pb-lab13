@@ -3,7 +3,7 @@ with Ada.Directories, Ada.Characters.Handling, Ada.Integer_Text_IO,
 use Ada.Directories, Ada.Characters.Handling, Ada.Integer_Text_IO, Ada.Text_IO,
   NT_Console;
 
-package body P_Imagen_Escondida is
+package body Lab13 is
 
    ------------------------------------
    -- AUTHOR: BERGARETXE LOPEZ, LUKA --
@@ -843,4 +843,4 @@ package body P_Imagen_Escondida is
          end loop;
       end if;
    end Fase_2;
-end P_Imagen_Escondida;
+end Lab13;

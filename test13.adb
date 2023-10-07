@@ -1,8 +1,9 @@
-with P_Imagen_Escondida, Ada.Text_IO, Ada.Integer_Text_IO, Ada.Directories,
+with Lab13, Ada.Text_IO, Ada.Integer_Text_IO, Ada.Directories,
   NT_Console;
-use P_Imagen_Escondida, Ada.Text_IO, Ada.Integer_Text_IO, Ada.Directories,
+use Lab13, Ada.Text_IO, Ada.Integer_Text_IO, Ada.Directories,
   NT_Console;
-procedure pruebas is
+  
+procedure Test13 is
 
    L_Pistas : T_Lista_E_Pistas;
    F, C     : Integer;
@@ -182,4 +183,4 @@ begin
       end case;
    end loop;
    Put_Line ("Fin del programa");
-end pruebas;
+end Test13;

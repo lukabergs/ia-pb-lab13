@@ -1,4 +1,4 @@
-package P_Imagen_Escondida is
+package Lab13 is
 
    type T_Casilla is (Duda, Blanco, Negro);
    type T_contador is array (T_Casilla) of Natural;
@@ -123,4 +123,4 @@ package P_Imagen_Escondida is
       Sol             : in out T_Lista_D_Pistas);
    -- Post: Sol es la lista de pistas que se pueden resolver de la imagen
 
-end P_Imagen_Escondida;
+end Lab13;
